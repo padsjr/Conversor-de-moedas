@@ -1,0 +1,18 @@
+# Bytecode compilado do Java
+*.class
+
+# Pastas de compilação/saída (onde fica a outra calculadora compilada)
+bin/
+out/
+target/
+build/
+
+# Configurações do IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Arquivos temporários e de SO
+.DS_Store
+Thumbs.db
