@@ -7,7 +7,6 @@
     <list default="true" id="f82ba579-7bba-4621-91ea-d806e596abe0" name="Changes" comment="feat update, agora o sistema permite ao usuario apenas selecionar qual moeda(dolar,Euro,Libra), ao inves de descrever cada.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Conversor.java" beforeDir="false" afterPath="$PROJECT_DIR$/Conversor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Conversor-de-moedas/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Conversor-de-moedas/.idea/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Conversor-de-moedas/Conversor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Conversor-de-moedas/Conversor.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -55,7 +54,7 @@
   "keyToString": {
     "Application.Conversor.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "dev2",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",

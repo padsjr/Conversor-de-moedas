@@ -6,7 +6,6 @@ public class Conversor {
         Scanner sc = new Scanner(System.in);
         double valor;
         int moeda1, moeda2;
-        double taxa;
 
 
 
@@ -16,7 +15,7 @@ public class Conversor {
         System.out.println("O valor digitado foi: " + valor);
         System.out.println("Selecione agora em qual moeda sera convertida");
         moeda2 = entradaMoeda(sc);
-        System.out.println("Voce selecionou a conversão de  " + valor +"$ " + nomearMoeda(moeda1) + ", para converter em "+ nomearMoeda(moeda2));
+        System.out.printf("Voce selecionou a conversão de %.2f %s para converter em %s \n", valor, nomearMoeda(moeda1), nomearMoeda(moeda2));
         System.out.println("Convertido a moeda, voce teria " +  converterMoeda(moeda1, moeda2, valor) + "$ " + nomearMoeda(moeda2));
 
 
@@ -33,6 +32,7 @@ public class Conversor {
                 return sc.nextDouble();
             } catch (InputMismatchException e) {
                 System.out.println("Valor invalido, digite novamente");
+                sc.nextLine();
             }
         }
     }
@@ -58,11 +58,11 @@ public class Conversor {
 public static String nomearMoeda( int moeda) {
         switch (moeda) {
             case 1:
-                return "Dolares";
+                return "USD";
             case 2:
-                return "Euros";
+                return "EUR";
             case 3:
-                return "Libras";
+                return "GBP";
         }
     return "Ocorreu um erro ao identificar a moeda";
 }
@@ -96,6 +96,8 @@ public static String nomearMoeda( int moeda) {
                         return valor/dolarLibra;
                     case 2:
                         return valor/euroLibra;
+                    case 3:
+                        return valor;
                 }
         }
         return 0;
