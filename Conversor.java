@@ -5,14 +5,14 @@ public class Conversor {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         double valor;
-        String moeda1, moeda2;
+        int moeda1, moeda2;
         double taxa;
 
         valor = entradaValor(sc);
         System.out.println("O valor digitado foi: " + valor);
-        System.out.println("Digite agora a primeira moeda");
+        System.out.println("Selecione a moeda que voce deseja converter");
         moeda1 = entradaMoeda(sc);
-        System.out.println("Digite agora a segunda moeda");
+        System.out.println("Selecione agora em qual moeda sera convertida");
         moeda2 = entradaMoeda(sc);
         System.out.println("Qual a taxa de conversão da moeda " + moeda1 + " para a moeda " + moeda2 + ": ");
         taxa = entradaTaxa(sc);
@@ -34,10 +34,19 @@ public class Conversor {
             }
         }
     }
-    public static String entradaMoeda( Scanner sc) {
+    public static int entradaMoeda( Scanner sc) {
         while (true) {
+            System.out.println("1 - Dólar (USD)");
+            System.out.println("2 - Euro (EUR)");
+            System.out.println("3 - Libra (GBP)");
+            int moedaSelecionada = sc.nextInt();
+
             try{
-                return sc.next();
+                if (3 < moedaSelecionada) {
+                    System.out.println("Valor invalido, digite novamente");
+                    continue;
+                }
+                return moedaSelecionada;
             }catch (InputMismatchException e) {
                 System.out.println("Moeda invalida, digite novamente");
                 sc.nextLine();
