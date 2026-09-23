@@ -1,12 +1,17 @@
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Conversor {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+
         double valor;
         int moeda1, moeda2;
-
 
 
         System.out.println("Selecione a moeda que voce deseja converter");
@@ -15,15 +20,17 @@ public class Conversor {
         System.out.println("O valor digitado foi: " + valor);
         System.out.println("Selecione agora em qual moeda sera convertida");
         moeda2 = entradaMoeda(sc);
-        System.out.printf("Voce selecionou a conversão de %.2f %s para converter em %s \n", valor, nomearMoeda(moeda1), nomearMoeda(moeda2));
-        System.out.println("Convertido a moeda, voce teria " +  converterMoeda(moeda1, moeda2, valor) + "$ " + nomearMoeda(moeda2));
 
+        String moeda1String = nomearMoeda(moeda1);
+        String moeda2String = nomearMoeda(moeda2);
 
+        System.out.printf("Voce selecionou a conversão de %.2f %s para converter em %s \n", valor, moeda1String, moeda2String);
+        System.out.println("Convertido a moeda, voce teria " +  converterMoeda(moeda1String, moeda2String, valor) + " " + moeda2String);
 
-
-
-
+        System.out.println(chamadaAPI(moeda1String, moeda2String));
     }
+
+
     public static double entradaValor( Scanner sc) {
         while (true) {
             System.out.println("Digite o valor do moeda: ");
@@ -55,7 +62,7 @@ public class Conversor {
             }
         }
 }
-public static String nomearMoeda( int moeda) {
+    public static String nomearMoeda( int moeda) {
         switch (moeda) {
             case 1:
                 return "USD";
@@ -66,40 +73,59 @@ public static String nomearMoeda( int moeda) {
         }
     return "Ocorreu um erro ao identificar a moeda";
 }
-    public static double converterMoeda(int moeda1, int moeda2,double valor) {
-        double dolarEuro = 0.87;
-        double dolarLibra = 0.75;
-        double euroLibra = 0.86;
+    public static double converterMoeda(String moeda1, String moeda2,double valor) {
+        double taxaDeConversao = chamadaAPI(moeda1, moeda2);
+        return valor*taxaDeConversao;
+    }
+    public static double chamadaAPI(String moedaConversao, String moedaConvertida) {
 
-        switch (moeda1){
-            case 1:
-               switch (moeda2){
-                    case 1:
-                        return valor;
-                    case 2:
-                        return valor*dolarEuro;
-                    case 3:
-                        return valor*dolarLibra;
-               }
-            case 2:
-               switch (moeda2){
-                    case 1:
-                        return valor/dolarEuro;
-                    case 2:
-                        return valor;
-                    case 3:
-                        return valor*euroLibra;
-               }
-            case 3:
-                switch (moeda2){
-                    case 1:
-                        return valor/dolarLibra;
-                    case 2:
-                        return valor/euroLibra;
-                    case 3:
-                        return valor;
-                }
-        }
+        HttpClient client = HttpClient.newHttpClient();
+
+        String urlRequest = "https://economia.awesomeapi.com.br/json/last/" + moedaConversao + "-" + moedaConvertida;
+        System.out.println(urlRequest);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(urlRequest))
+                .GET()
+                .header("Accept", "application/json")
+                .build();
+        try{
+            HttpResponse<String> response = client.send(
+                    request,
+                    HttpResponse.BodyHandlers.ofString()
+            );
+            int statusCode = response.statusCode();
+            if (statusCode == 200) {
+                return obterCotacao(response.body());
+            }
+
+        }catch (IOException e) {
+            System.out.println("Erro de conexão de rede: " + e.getMessage());
+    }catch (InterruptedException e) {
+            System.out.println("A requisição foi cancelada: " + e.getMessage());
+}
         return 0;
+    }
+    public static double obterCotacao(String jsonBody){
+        String termoBusca = "\"bid\":\"";
+        int buscaInicioBid = jsonBody.indexOf(termoBusca);
+
+        if (buscaInicioBid == -1) {
+            System.out.println("Campo 'bid' não encontrado no JSON.");
+            return 0.0;
+        }
+        buscaInicioBid += termoBusca.length();
+
+        int buscaFimBid = jsonBody.indexOf("\"", buscaInicioBid);
+        if (buscaFimBid == -1) {
+            System.out.println("O \" não foi encontrado no JSON.");
+            return 0.0;
+        }
+        String valorBid = jsonBody.substring(buscaInicioBid, buscaFimBid);
+        return Double.parseDouble(valorBid);
+
+
+
+
     }
 }
